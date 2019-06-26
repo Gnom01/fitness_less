@@ -49,7 +49,7 @@ namespace CodeBlogFitness.BL.Model
             {
                 throw new ArgumentNullException("Имя не может быть пустым", nameof(name));
             }
-            if (Gender == null)
+            if (gender == null)
             {
                 throw new ArgumentNullException("Пол не может быть пустой", nameof(gender));
             }
