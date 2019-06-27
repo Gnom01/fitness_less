@@ -25,6 +25,10 @@ namespace CodeBlogFitness.BL.Model
             Name = name;
 
         }
+        /// <summary>
+        /// Присвоения значения стринга
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Name; ;

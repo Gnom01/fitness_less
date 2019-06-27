@@ -1,7 +1,9 @@
 ﻿using CodeBlogFitness.BL.Model;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace CodeBlogFitness.BL.Controller
 {
@@ -13,33 +15,73 @@ namespace CodeBlogFitness.BL.Controller
         /// <summary>
         /// Пользователь приложения
         /// </summary>
-       private readonly User User;
+      public List<User>Users { get; }
+      public User CurrentUser { get; }
+
+        public bool IsNewUser { get; } = false;
+
         /// <summary>
         /// Создание нового контроллера
         /// </summary>
         /// <param name="user"></param>
-       public UserController(string userName, string genderName, DateTime birdthDay, double weight, double height)
+       public UserController(string userName)
         {
-            //TODO: Проверка
-            var gender = new Gender(genderName);
-            User = new User(userName, gender, birdthDay, weight, height);
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                throw new ArgumentNullException("Имя пользователя не может быть null", nameof(userName));
+            }
+
+            Users = GetUsersData();
+
+            CurrentUser = Users.SingleOrDefault(u => u.Name == userName);
+
+            if(CurrentUser == null)
+            {
+                CurrentUser = new User(userName);
+                Users.Add(CurrentUser);
+                IsNewUser = true;
+                Save();
+            }
+
         }
+
         /// <summary>
-        /// Получить данные пользователя 
+        /// Получить список пользователя 
         /// </summary>
         /// <returns>Пользователь приложения</returns>
-        public UserController()
+        private List<User> GetUsersData()
         {
             var formatter = new BinaryFormatter();
+
             using (var fs = new FileStream("using.dat", FileMode.OpenOrCreate))
             {
-                if (formatter.Deserialize(fs) is User user)
+                //if(fs.Position == 0)
+                //{
+                //    return new List<User>();
+                //}
+                //else 
+                if (formatter.Deserialize(fs) is List<User> Users)
                 {
-                    User = user;
+                    return Users;
                 }
-                // TODO: что делать если пользователя не прочитали
+               else
+                {
+                    return new List<User>();
+                }
             }
         }
+        public void SretNewUserData(string genderNamie, DateTime birthDate, double weight = 1, double height = 1 )
+        {
+            // Проверка
+            CurrentUser.Gender = new Gender(genderNamie);
+            CurrentUser.BirthDate = birthDate;
+            CurrentUser.Weight = weight;
+            CurrentUser.Height = height;
+            Save();
+        }
+         
+
+
 
         /// <summary>
         /// Сохранить данные пользователя
@@ -49,10 +91,8 @@ namespace CodeBlogFitness.BL.Controller
             var formatter = new BinaryFormatter();
             using (var fs = new FileStream("using.dat", FileMode.OpenOrCreate))
             {
-                formatter.Serialize(fs, User);
+                formatter.Serialize(fs, Users);
             }
-        }
-        
+        }  
     }
-
 }
