@@ -15,9 +15,8 @@ namespace CodeBlogFitness.BL.Controller
         /// <summary>
         /// Пользователь приложения
         /// </summary>
-      public List<User>Users { get; }
-      public User CurrentUser { get; }
-
+        public List<User>Users { get; }
+        public User CurrentUser { get; }
         public bool IsNewUser { get; } = false;
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace CodeBlogFitness.BL.Controller
                 //    return new List<User>();
                 //}
                 //else 
-                if (formatter.Deserialize(fs) is List<User> Users)
+                if (fs.Length > 0 && formatter.Deserialize(fs) is List<User> Users)
                 {
                     return Users;
                 }
@@ -79,10 +78,6 @@ namespace CodeBlogFitness.BL.Controller
             CurrentUser.Height = height;
             Save();
         }
-         
-
-
-
         /// <summary>
         /// Сохранить данные пользователя
         /// </summary>
