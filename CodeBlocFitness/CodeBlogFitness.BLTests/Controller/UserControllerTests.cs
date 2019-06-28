@@ -45,5 +45,6 @@ namespace CodeBlogFitness.BL.Controller.Tests
             //Assert
             Assert.AreEqual(userName, controller.CurrentUser.Name);
         }
+
     }
 }
