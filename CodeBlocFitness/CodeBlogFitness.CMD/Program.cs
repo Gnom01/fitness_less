@@ -25,7 +25,26 @@ namespace CodeBlogFitness.CMD
                 UserController.SretNewUserData(gender, birthDate, weight, height);
             }
             Console.WriteLine(UserController.CurrentUser);
+            Console.WriteLine("Что вы хотите сделать?");
+            Console.WriteLine("Е - ввести прием пищи");
+            var key = Console.ReadKey();
+
+            if (key.Key == ConsoleKey.E)
+            {
+                EnterEating();
+            }
+
             Console.ReadLine();
+        }
+
+        private static Food EnterEating()
+        {
+            Console.WriteLine("Введите имя продукта: ");
+            var food = Console.ReadLine();
+
+            Console.Write("Введите вес порции: ");
+            var weight = ParseDouble("Все порции");
+            return new Food( )vbcvb
         }
 
         private static DateTime PasreDateTime()
